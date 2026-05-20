@@ -88,7 +88,8 @@ class BaseAgent(ABC):
         else:
             return ChatOpenAI(
                 model=settings.model,
-                api_key=settings.api_key,
+                api_key=settings.api_key or "local-api-key",
+                base_url=settings.base_url,
                 temperature=self.temperature,
                 max_tokens=8192,
             )

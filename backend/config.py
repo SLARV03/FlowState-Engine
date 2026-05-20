@@ -7,6 +7,7 @@ Provides a singleton Settings object accessible via get_settings().
 
 import os
 from functools import lru_cache
+from typing import Optional
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
@@ -18,6 +19,7 @@ class LLMSettings(BaseModel):
     provider: str = Field(default="openai", description="LLM provider: openai | anthropic")
     model: str = Field(default="gpt-4o", description="Model identifier")
     api_key: str = Field(default="", description="API key for the LLM provider")
+    base_url: Optional[str] = Field(default=None, description="Custom base URL for the provider")
     temperature_pm: float = Field(default=0.4, description="PM agent temperature")
     temperature_swe: float = Field(default=0.2, description="SWE agent temperature")
     temperature_qa: float = Field(default=0.1, description="QA agent temperature")
@@ -55,6 +57,7 @@ def get_settings() -> Settings:
             provider=os.getenv("LLM_PROVIDER", "openai"),
             model=os.getenv("LLM_MODEL", "gpt-4o"),
             api_key=os.getenv("LLM_API_KEY", ""),
+            base_url=os.getenv("LLM_BASE_URL", None),
             temperature_pm=float(os.getenv("LLM_TEMPERATURE_PM", "0.4")),
             temperature_swe=float(os.getenv("LLM_TEMPERATURE_SWE", "0.2")),
             temperature_qa=float(os.getenv("LLM_TEMPERATURE_QA", "0.1")),
